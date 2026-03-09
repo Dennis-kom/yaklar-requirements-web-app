@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+
 import os
+from datetime import timedelta
 
 db = SQLAlchemy()
 
@@ -12,9 +14,10 @@ def create_app():
     app = Flask(__name__, template_folder='templates', static_folder=static_folder)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///appdata.db'
     app.config['SECRET_KEY'] = 'your-secret-key-here-change-in-production'
+    app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=40)
+
     db.init_app(app)
 
-    # TODO: create and register all blueprints
     from requests_application.core.routes import core
     from requests_application.users.routes import users
     from requests_application.cit_request.routes import cit_request
@@ -24,7 +27,6 @@ def create_app():
     app.register_blueprint(cit_request, url_prefix='/cit_request')
 
     migrate = Migrate(app,db)
-
 
     return app
 

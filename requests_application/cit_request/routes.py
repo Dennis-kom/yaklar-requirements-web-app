@@ -1,11 +1,35 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 from requests_application.app import db
 from requests_application.cit_request.models import CitRequest
-from datetime import datetime
+from datetime import datetime, timedelta
 
 cit_request = Blueprint('cit_request', __name__, template_folder='templates')
 
 request_status = {0: 'התקבל', 1: 'הועבר לאישור', 2: 'אושר', 3: 'נדחה' }
+
+# ...existing code...
+
+@cit_request.route('/delete/<int:request_id>', methods=['POST'])
+def delete_request(request_id):
+    request_to_delete = CitRequest.query.get_or_404(request_id)
+
+    try:
+        db.session.delete(request_to_delete)
+        db.session.commit()
+        return jsonify({'success': True, 'message': 'Request deleted successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'error': 'database_error'}), 500
+
+def mandatory_content_approve(text: str):
+    missing_parameters = []
+    mandatory_components ={"תדריך": ['יקל"ר', 'יקלר'],"מיגון":['מיגון', 'ממ"ד', 'ממד','מקלט'] }
+    for topic, words in mandatory_components.items():
+        for word in words:
+            if word in text:
+                missing_parameters.append(topic)
+
+    return missing_parameters
 
 @cit_request.route('/view')
 def view():
@@ -14,11 +38,18 @@ def view():
 
 @cit_request.route('/viewall')
 def viewall():
-    requests = CitRequest.query.all()
+    today = datetime.now().date()
+    ten_days_later = today - timedelta(days=30)
+    requests = CitRequest.query.filter(
+        CitRequest.target_date >= today,
+        CitRequest.target_date >= ten_days_later
+    ).all()
     return render_template('cit_requests/viewall.html', requests=requests)
 
 @cit_request.route('/create', methods=['GET', 'POST'])
 def create():
+
+
     if request.method == 'POST':
         requester_name = request.form['requester_name']
         location = request.form['location']
@@ -48,6 +79,14 @@ def create():
 
     return render_template('cit_requests/create.html')
 
+@cit_request.route('/update', methods=['GET', 'POST'])
+def update_choice():
+    requests = CitRequest.query.all()
+    if request.method == 'POST':
+        selected_request_id = request.form['selected_id']
+        return redirect(url_for('cit_request.update', request_id=selected_request_id))
+    return render_template('cit_requests/update_choice.html', requests=requests)
+
 @cit_request.route('/update/<int:request_id>', methods=['GET', 'POST'])
 def update(request_id):
     request_to_update = CitRequest.query.get_or_404(request_id)
@@ -66,4 +105,11 @@ def update(request_id):
 
         return redirect(url_for('cit_request.viewall'))
 
-    return render_template('cit_request/update.html', cit_request=request_to_update)
+    return render_template('cit_requests/update.html', cit_request=request_to_update)
+
+@cit_request.route('/delete/<int:request_id>')
+def delete(request_id):
+    request_to_delete = CitRequest.query.get_or_404(request_id)
+    db.session.delete(request_to_delete)
+    db.session.commit()
+    return redirect(url_for('cit_request.viewall'))

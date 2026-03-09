@@ -1,10 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}עדכון בקשת החרגה{% endblock %}
+{% block content %}
+<div style="position: relative; min-height: 80vh;">
+    <button onclick="window.location.href='{{ url_for('core.index') }}'" style="position: absolute; top: -10px; right: 10px; padding: 5px 20px; background-color: green; color: white; border: none; border-radius: 4px; cursor: pointer; font-family: David;">חזור</button>
 
-</body>
-</html>
+    <form method="post" style="max-width: 600px; margin: 40px auto; background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+        <div style="flex: 1;">
+            <label for="end_time" style="font-family: David; font-weight: bold;">שעת סיום</label><br>
+            <select id="end_time" name="end_time" style="width: 100%; padding: 8px;">
+                {% for hour in range(0,24) %}
+                <option value="{{ '%02d:00' % hour }}" {% if cit_request.end_time.strftime('%H:%M') == '%02d:00' % hour %}selected{% endif %}>{{ '%02d:00' % hour }}</option>
+                <option value="{{ '%02d:30' % hour }}" {% if cit_request.end_time.strftime('%H:%M') == '%02d:30' % hour %}selected{% endif %}>{{ '%02d:30' % hour }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="flex: 1;">
+            <label for="start_time" style="font-family: David; font-weight: bold;">שעת התחלה</label><br>
+            <select id="start_time" name="start_time" style="width: 100%; padding: 8px;">
+                {% for hour in range(0,24) %}
+                <option value="{{ '%02d:00' % hour }}" {% if cit_request.start_time.strftime('%H:%M') == '%02d:00' % hour %}selected{% endif %}>{{ '%02d:00' % hour }}</option>
+                <option value="{{ '%02d:30' % hour }}" {% if cit_request.start_time.strftime('%H:%M') == '%02d:30' % hour %}selected{% endif %}>{{ '%02d:30' % hour }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="flex: 1;">
+            <label for="target_date" style="font-family: David; font-weight: bold;">תאריך</label><br>
+            <input type="date" id="target_date" name="target_date" value="{{ cit_request.target_date }}" style="width: 100%; padding: 8px;" required />
+        </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+        <div style="flex: 2;">
+            <label for="location" style="font-family: David; font-weight: bold;">מיקום</label><br>
+            <input type="text" id="location" name="location" value="{{ cit_request.location }}" style="width: 100%; padding: 8px;" required />
+        </div>
+        <div style="flex: 1;">
+            <label for="people_amount" style="font-family: David; font-weight: bold;">כמות משתתפים</label><br>
+            <input type="number" id="people_amount" name="people_amount" value="{{ cit_request.people_amount }}" min="1" style="width: 100%; padding: 8px;" required />
+        </div>
+    </div>
+    <div style="margin-bottom: 20px;">
+        <label for="request_content" style="font-family: David; font-weight: bold;">תוכן הבקשה</label><br>
+        <textarea id="request_content" name="request_content" rows="4" style="width: 100%; padding: 8px;" required>{{ cit_request.request_content }}</textarea>
+    </div>
+    <div style="margin-bottom: 20px;">
+        <label for="status" style="font-family: David; font-weight: bold;">סטטוס</label><br>
+        <select id="status" name="status" style="width: 100%; padding: 8px;">
+            <option value="0" {% if cit_request.status == 'התקבל' %}selected{% endif %}>התקבל</option>
+            <option value="1" {% if cit_request.status == 'הועבר לאישור' %}selected{% endif %}>הועבר לאישור</option>
+            <option value="2" {% if cit_request.status == 'אושר' %}selected{% endif %}>אושר</option>
+            <option value="3" {% if cit_request.status == 'נדחה' %}selected{% endif %}>נדחה</option>
+        </select>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+        <div style="flex: 2;">
+            <label for="requester_name" style="font-family: David; font-weight: bold;">שם המבקש</label><br>
+            <input type="text" id="requester_name" name="requester_name" value="{{ cit_request.requester_name }}" style="width: 100%; padding: 8px;" required />
+        </div>
+        <button type="submit" id="submit_btn" style="flex: 1; padding: 12px; background-color: green; color: white; border: none; border-radius: 4px; font-family: David; font-size: 18px; margin-top: 24px;">עדכון</button>
+    </div>
+</form>
+<script>
+    const requesterInput = document.getElementById('requester_name');
+    const submitBtn = document.getElementById('submit_btn');
+
+    function updateButtonState() {
+        if (requesterInput.value.trim() === '') {
+            submitBtn.disabled = true;
+            submitBtn.style.backgroundColor = '#cccccc';
+            submitBtn.style.cursor = 'not-allowed';
+        } else {
+            submitBtn.disabled = false;
+            submitBtn.style.backgroundColor = 'green';
+            submitBtn.style.cursor = 'pointer';
+        }
+    }
+
+    requesterInput.addEventListener('input', updateButtonState);
+    updateButtonState();
+</script>
+</div>
+{% endblock %}

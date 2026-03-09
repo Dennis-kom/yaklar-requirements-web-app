@@ -4,33 +4,45 @@
 
 {% block content %}
 <div style="position: relative; min-height: 80vh;">
-    <button onclick="history.back()" style="position: absolute; top: -10px; right: 10px; padding: 5px 20px; background-color: green; color: white; border: none; border-radius: 4px; cursor: pointer; font-family: David;">חזור</button>
+    <button onclick="window.location.href='{{ url_for('core.index') }}'" style="position: absolute; top: -10px; right: 10px; padding: 5px 20px; background-color: green; color: white; border: none; border-radius: 4px; cursor: pointer; font-family: David;">חזור</button>
 
     <div style="padding: 20px; margin-top: 60px;">
         <table style="width: 100%; border-collapse: collapse; background-color: white;">
             <thead>
                 <tr style="background-color: #f0f0f0;">
-                    <th style="border: 1px solid #ddd; padding: 10px;">שם מבקש</th>
-                    <th style="border: 1px solid #ddd; padding: 10px;">תאריך</th>
-                    <th style="border: 1px solid #ddd; padding: 10px;">שעת התחלה</th>
-                    <th style="border: 1px solid #ddd; padding: 10px;">שעת סיום</th>
-                    <th style="border: 1px solid #ddd; padding: 10px;">תוכן הבקשה</th>
-                    <th style="border: 1px solid #ddd; padding: 10px;">מיקום</th>
-                    <th style="border: 1px solid #ddd; padding: 10px;">מספר אנשים</th>
-                    <th style="border: 1px solid #ddd; padding: 10px;">סטטוס</th>
+                    <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">שם מבקש</th>
+                    <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">תאריך</th>
+                    <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">שעת התחלה</th>
+                    <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">שעת סיום</th>
+                    <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">תוכן הבקשה</th>
+                    <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">מיקום</th>
+                    <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">מספר אנשים</th>
+                    <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">סטטוס</th>
                 </tr>
             </thead>
             <tbody>
                 {% for req in requests %}
                 <tr>
-                    <td style="border: 1px solid #ddd; padding: 10px;">{{ req.requester_name }}</td>
-                    <td style="border: 1px solid #ddd; padding: 10px;">{{ req.target_date }}</td>
-                    <td style="border: 1px solid #ddd; padding: 10px;">{{ req.start_time }}</td>
-                    <td style="border: 1px solid #ddd; padding: 10px;">{{ req.end_time }}</td>
-                    <td style="border: 1px solid #ddd; padding: 10px;">{{ req.request_content }}</td>
-                    <td style="border: 1px solid #ddd; padding: 10px;">{{ req.location }}</td>
-                    <td style="border: 1px solid #ddd; padding: 10px;">{{ req.people_amount }}</td>
-                    <td style="border: 1px solid #ddd; padding: 10px;">{{ req.status }}</td>
+                    <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">{{ req.requester_name }}</td>
+                    <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">{{ req.target_date }}</td>
+                    <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">{{ req.start_time }}</td>
+                    <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">{{ req.end_time }}</td>
+                    <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">{{ req.request_content }}</td>
+                    <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">{{ req.location }}</td>
+                    <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">{{ req.people_amount }}</td>
+                    <td style="border: 1px solid #ddd; padding: 10px; text-align: center;
+                        {% if req.status == 'נדחה' %}
+                            background-color: #ffcccc;
+                        {% elif req.status == 'אושר' %}
+                            background-color: #ccffcc;
+                        {% elif req.status == 'התקבל' %}
+                            background-color: #ccffff;
+                        {% elif req.status == 'הועבר לאישור' %}
+                            background-color: #ffe6cc;
+                        {% elif req.status == 'אושר בכפוף' %}
+                            background-color: #ffffcc;
+                        {% endif %}
+                    ">{{ req.status }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
