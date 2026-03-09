@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}הזדהות{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 80vh;">
+    <div style="border: 2px solid black; padding: 30px; background-color: white; border-radius: 5px; width: 300px;">
+        <h1 style="font-family: David; font-weight: bold; text-align: center;">הזדהות</h1>
+        <form method="post">
+            <div style="margin-bottom: 20px;">
+                <label for="username" style="font-family: David; display: block; margin-bottom: 5px;">משתמש</label>
+                <input type="text" id="username" name="username" style="width: 100%; padding: 8px; box-sizing: border-box;" required />
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label for="password" style="font-family: David; display: block; margin-bottom: 5px;">סיסמא</label>
+                <input type="password" id="password" name="password" style="width: 100%; padding: 8px; box-sizing: border-box;" required />
+            </div>
+            <button type="submit" style="width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-family: David;">כניסה</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body style="background-color: rgba(210, 220, 220, 0.85);">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+        <div style="font-family: David; font-weight: bold; text-align: right; font-size: 32px;">
+            ממשק בקשות להחרגה
+        </div>
+        <button id="edit_tuple" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-family: David; font-weight: bold;">
+            עדכון בקשה
+        </button>
+         <img src="{{ url_for('static', filename='symb.jpg') }}"  style="height: 100px;"  alt=""/>
+    </div>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

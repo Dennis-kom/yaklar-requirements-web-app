@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}הוספת בקשת החרגה{% endblock %}
+{% block content %}
+<form method="post" style="max-width: 600px; margin: 40px auto; background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+        <div style="flex: 1;">
+            <label for="target_date" style="font-family: David; font-weight: bold;">תאריך</label><br>
+            <input type="date" id="target_date" name="target_date" style="width: 100%; padding: 8px;" required />
+        </div>
+        <div style="flex: 1;">
+            <label for="start_time" style="font-family: David; font-weight: bold;">שעת התחלה</label><br>
+            <select id="start_time" name="start_time" style="width: 100%; padding: 8px;">
+                {% for hour in range(0,24) %}
+                <option value="{{ '%02d:00' % hour }}">{{ '%02d:00' % hour }}</option>
+                <option value="{{ '%02d:30' % hour }}">{{ '%02d:30' % hour }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="flex: 1;">
+            <label for="end_time" style="font-family: David; font-weight: bold;">שעת סיום</label><br>
+            <select id="end_time" name="end_time" style="width: 100%; padding: 8px;">
+                {% for hour in range(0,24) %}
+                <option value="{{ '%02d:00' % hour }}">{{ '%02d:00' % hour }}</option>
+                <option value="{{ '%02d:30' % hour }}">{{ '%02d:30' % hour }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+        <div style="flex: 2;">
+            <label for="location" style="font-family: David; font-weight: bold;">מיקום</label><br>
+            <input type="text" id="location" name="location" style="width: 100%; padding: 8px;" required />
+        </div>
+        <div style="flex: 1;">
+            <label for="people_amount" style="font-family: David; font-weight: bold;">כמות משתתפים</label><br>
+            <input type="number" id="people_amount" name="people_amount" min="1" style="width: 100%; padding: 8px;" required />
+        </div>
+    </div>
+    <div style="margin-bottom: 20px;">
+        <label for="content" style="font-family: David; font-weight: bold;">תוכן הבקשה</label><br>
+        <textarea id="content" name="content" rows="4" style="width: 100%; padding: 8px;" required></textarea>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+        <div style="flex: 2;">
+            <label for="requester_name" style="font-family: David; font-weight: bold;">שם המבקש</label><br>
+            <input type="text" id="requester_name" name="requester_name" style="width: 100%; padding: 8px;" required />
+        </div>
+        <button type="submit" id="submit_btn" style="flex: 1; padding: 12px; background-color: green; color: white; border: none; border-radius: 4px; font-family: David; font-size: 18px; margin-top: 24px;">הוסף</button>
+    </div>
+</form>
+<script>
+    const requesterInput = document.getElementById('requester_name');
+    const submitBtn = document.getElementById('submit_btn');
+
+    function updateButtonState() {
+        if (requesterInput.value.trim() === '') {
+            submitBtn.disabled = true;
+            submitBtn.style.backgroundColor = '#cccccc';
+            submitBtn.style.cursor = 'not-allowed';
+        } else {
+            submitBtn.disabled = false;
+            submitBtn.style.backgroundColor = 'green';
+            submitBtn.style.cursor = 'pointer';
+        }
+    }
+
+    requesterInput.addEventListener('input', updateButtonState);
+    updateButtonState();
+</script>
+{% endblock %}
