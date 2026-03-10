@@ -7,8 +7,6 @@ cit_request = Blueprint('cit_request', __name__, template_folder='templates')
 
 request_status = {0: 'התקבל', 1: 'הועבר לאישור', 2: 'אושר', 3: 'נדחה' }
 
-# ...existing code...
-
 @cit_request.route('/delete/<int:request_id>', methods=['POST'])
 def delete_request(request_id):
     request_to_delete = CitRequest.query.get_or_404(request_id)
@@ -56,16 +54,22 @@ def create():
         target_date = datetime.strptime(request.form['target_date'], '%Y-%m-%d').date()
         start_time = datetime.strptime(request.form['start_time'], '%H:%M').time()
         end_time = datetime.strptime(request.form['end_time'], '%H:%M').time()
+        shelter = request.form.get('shelter')
+        authority =request.form.get('authority')
+        warning = request.form.get('warning')
+        sequrity = request.form.get('sequrity')
+        contact = request.form.get('contact')
         request_content = request.form['content']
         people_amount = int(request.form['people_amount'])
         status = request_status[0]
+        full_content =  "תוכן:" + "\n" + request_content + "\n" + "מיגון:" + shelter + "\n" + "יקלר:" + authority + "\n" + "התרעה:" + warning + "\n" + "אבטחה:" + sequrity + "\n" + "איש קשר:" + contact
 
         new_request = CitRequest(
             requester_name=requester_name,
             target_date=target_date,
             start_time=start_time,
             end_time=end_time,
-            request_content=request_content,
+            request_content=full_content,
             location=location,
             people_amount=people_amount,
             status=status
@@ -100,6 +104,11 @@ def update(request_id):
         request_to_update.request_content = request.form['request_content']
         request_to_update.people_amount = int(request.form['people_amount'])
         request_to_update.status = request_status[int(request.form['status'])]
+        request_to_update.shelter = request.form['shelter']
+        request_to_update.authority = request.form['authority']
+        request_to_update.warning = request.form['warning']
+        request_to_update.sequrity = request.form['sequrity']
+        request_to_update.contact = request.form['contact']
 
         db.session.commit()
 

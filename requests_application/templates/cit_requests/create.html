@@ -41,6 +41,26 @@
         <label for="content" style="font-family: David; font-weight: bold;">תוכן הבקשה</label><br>
         <textarea id="content" name="content" rows="4" style="width: 100%; padding: 8px;" placeholder="יש להתיחס לתרדיך הוראות התגוננות למשתתפים, נוכחות יקל״ר , ומהו המיגון במקום השהות של המשתתפים" required></textarea>
     </div>
+    <div style="margin-bottom: 20px;">
+        <label for="shelter" style="font-family: David; font-weight: bold;">מיגון</label><br>
+        <textarea id="shelter" name="shelter" rows="2" style="width: 100%; padding: 8px;" placeholder="" required></textarea>
+    </div>
+    <div style="margin-bottom: 20px;">
+        <label for="authority" style="font-family: David; font-weight: bold;">יקל״ר</label><br>
+        <textarea id="authority" name="authority" rows="2" style="width: 100%; padding: 8px;" placeholder="" required></textarea>
+    </div>
+    <div style="margin-bottom: 20px;">
+        <label for="warning" style="font-family: David; font-weight: bold;">התרעה</label><br>
+        <textarea id="warning" name="warning" rows="2" style="width: 100%; padding: 8px;" placeholder="" required></textarea>
+    </div>
+    <div style="margin-bottom: 20px;">
+        <label for="sequrity" style="font-family: David; font-weight: bold;">אבטחה</label><br>
+        <textarea id="sequrity" name="sequrity" rows="2" style="width: 100%; padding: 8px;" placeholder="" required></textarea>
+    </div>
+    <div style="margin-bottom: 20px;">
+        <label for="contact" style="font-family: David; font-weight: bold;">איש קשר</label><br>
+        <textarea id="contact" name="contact" rows="2" style="width: 100%; padding: 8px;" placeholder="שם | תפקיד | טלפון" required></textarea>
+    </div>
     <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
         <div style="flex: 2;">
             <label for="requester_name" style="font-family: David; font-weight: bold;">שם המבקש</label><br>
@@ -51,10 +71,16 @@
 </form>
 <script>
     const requesterInput = document.getElementById('requester_name');
+    const contentInput = document.getElementById('content');
+    const shelterInput = document.getElementById('shelter');
+    const authorityInput = document.getElementById('authority');
+    const warningInput = document.getElementById('warning');
+    const sequrityInput = document.getElementById('sequrity');
+    const contactInput = document.getElementById('contact');
     const submitBtn = document.getElementById('submit_btn');
 
     function updateButtonState() {
-        if (requesterInput.value.trim() === '') {
+        if (requesterInput.value.trim() === '' || contentInput.value.trim() === '' || shelterInput.value.trim() === '' || authorityInput.value.trim() === '' || warningInput.value.trim() === '' || sequrityInput.value.trim() === '' || contactInput.value.trim() === '') {
             submitBtn.disabled = true;
             submitBtn.style.backgroundColor = '#cccccc';
             submitBtn.style.cursor = 'not-allowed';
