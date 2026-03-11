@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 cit_request = Blueprint('cit_request', __name__, template_folder='templates')
 
-request_status = {0: 'התקבל', 1: 'הועבר לאישור', 2: 'אושר', 3: 'נדחה' }
+request_status = {0: 'התקבל', 1: 'הועבר לאישור', 2: 'אושר', 3: 'נדחה',4: 'אושר בכפוף ל'}
 
 @cit_request.route('/delete/<int:request_id>', methods=['POST'])
 def delete_request(request_id):
@@ -39,7 +39,7 @@ def viewall():
     today = datetime.now().date()
     ten_days_later = today - timedelta(days=30)
     requests = CitRequest.query.filter(
-        CitRequest.target_date >= today,
+        #CitRequest.target_date >= today,
         CitRequest.target_date >= ten_days_later
     ).all()
     return render_template('cit_requests/viewall.html', requests=requests)

@@ -70,6 +70,7 @@
             <option value="1" {% if cit_request.status == 'הועבר לאישור' %}selected{% endif %}>הועבר לאישור</option>
             <option value="2" {% if cit_request.status == 'אושר' %}selected{% endif %}>אושר</option>
             <option value="3" {% if cit_request.status == 'נדחה' %}selected{% endif %}>נדחה</option>
+            <option value="4" {% if cit_request.status == 'אושר-בכפוף-ל' %}selected{% endif %}>אושר-בכפוף-ל</option>
         </select>
     </div>
     <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
